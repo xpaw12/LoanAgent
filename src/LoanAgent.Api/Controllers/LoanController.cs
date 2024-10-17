@@ -1,5 +1,6 @@
 ﻿using LoanAgent.Application.Loan.Commands.ChangeLoanStatus;
 using LoanAgent.Application.Loan.Commands.CreateLoan;
+using LoanAgent.Application.Loan.Commands.DeleteLoan;
 using LoanAgent.Application.Loan.Commands.EditLoan;
 using LoanAgent.Application.Loan.Queries.GetLoansByUserId;
 using LoanAgent.Application.Loan.Queries.GetLoansForAdmin;
@@ -43,6 +44,13 @@ public class LoanController : ApiControllerBase
 
     [HttpPut("change-status")]
     public async Task<IResult> ChangeLoanStatus([FromBody] ChangeLoanStatusCommand command, CancellationToken cancellationToken)
+    {
+        await Mediator.Send(command, cancellationToken);
+        return Results.NoContent();
+    }
+
+    [HttpDelete("delete")]
+    public async Task<IResult> DeleteLoan([FromBody] DeleteLoanCommand command, CancellationToken cancellationToken)
     {
         await Mediator.Send(command, cancellationToken);
         return Results.NoContent();

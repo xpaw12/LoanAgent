@@ -62,12 +62,12 @@ Ext.define('LoanAgentExt.view.auth.Login', {
             listeners: {
                 afterrender: function () {
                     this.getEl().on('click', function () {
-                        LoanAgentExt.app.setMainView('LoanAgentExt.view.auth.Register');=
+                        LoanAgentExt.app.setMainView('LoanAgentExt.view.auth.Register');
                     });
                 }
             }
         });
 
-        this.add(registerLink);=
+        this.add(registerLink);
     }
 });

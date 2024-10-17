@@ -53,6 +53,22 @@ Ext.define('LoanAgentExt.view.main.LoansGrid', {
 
                     return loanState !== 'InEditMode';
                 },
+            }, {
+                iconCls: 'fa fa-trash custom-action-icon',
+                tooltip: 'Delete Loan',
+                handler: function (grid, rowIndex, colIndex) {
+                    const record = grid.getStore().getAt(rowIndex);
+                    const loanId = record.get('loanId');
+
+                    Ext.Msg.confirm('Confirm Deletion', 'Are you sure you want to delete this loan?', function (btn) {
+                        if (btn === 'yes') {
+                            grid.up('loansgrid').deleteLoan(loanId);
+                        }
+                    });
+                },
+                isActionDisabled: function (view, rowIndex, colIndex, item, record) {
+                    return record.get('loanState') === 'Approved';
+                }
             }]
         }
     ],
@@ -171,6 +187,24 @@ Ext.define('LoanAgentExt.view.main.LoansGrid', {
             failure: function () {
                 Ext.Msg.alert('Error', 'Failed to update loan.');
             }
+        });
+    },
+    deleteLoan: function (loanId) {
+        Ext.Ajax.request({
+            url: LoanAgentExt.app.apiUrl + '/api/loans/delete',
+            method: 'DELETE',
+            jsonData: {
+                loanId: loanId
+            },
+            success: function (response) {
+                Ext.Msg.alert('Success', 'Loan deleted successfully.', function () {
+                    window.location.reload();
+                },);
+            },
+            failure: function (response) {
+                Ext.Msg.alert('Error', 'Failed to delete loan.');
+            },
+            scope: this
         });
     }
 });
