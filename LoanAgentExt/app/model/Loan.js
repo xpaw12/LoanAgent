@@ -3,6 +3,7 @@ Ext.define('LoanAgentExt.model.Loan', {
 
     fields: [
         { name: 'loanId', type: 'string' },
+        { name: 'loanOwnerName', type: 'string' },
         { name: 'loanAmount', type: 'number' },
         { name: 'currency', type: 'string' },
         { name: 'startDate', type: 'date' },

@@ -3,6 +3,7 @@
 public class LoanDto
 {
     public Guid LoanId { get; set; }
+    public string? LoanOwnerName { get; set; }
     public decimal LoanAmount { get; set; }
     public string Currency { get; set; } = null!;
     public DateTime StartDate { get; set; }

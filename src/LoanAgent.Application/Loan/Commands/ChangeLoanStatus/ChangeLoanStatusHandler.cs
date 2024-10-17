@@ -1,4 +1,5 @@
-﻿using LoanAgent.Application.Common.Exceptions;
+﻿using LoanAgent.Application.Common.Dtos;
+using LoanAgent.Application.Common.Exceptions;
 using LoanAgent.Application.Common.Interfaces.Helpers;
 using LoanAgent.Application.Common.Interfaces.UnitOfWork;
 using LoanAgent.Application.Common.Services;
@@ -53,7 +54,23 @@ public class ChangeLoanStatusCommandHandler : IRequestHandler<ChangeLoanStatusCo
             }
             else
             {
-                _loanPublisher.PublishLoan(loan);
+                var loanDto = new LoanDto
+                {
+                    LoanId = loan.Id,
+                    LoanOwnerName = user.FirstName + " " + user.LastName,
+                    LoanAmount = loan.LoanAmount,
+                    Currency = loan.Currency.ToString(),
+                    StartDate = loan.StartDate,
+                    EndDate = loan.EndDate,
+                    LoanType = loan.LoanType.ToString(),
+                    LoanState = loan.LoanState.ToString(),
+                    CreatedDateTime = loan.CreatedDateTime,
+                    CreatedById = loan.CreatedById,
+                    UpdatedDateTime = loan.UpdatedDateTime,
+                    UpdatedById = loan.UpdatedById
+                };
+
+                _loanPublisher.PublishLoan(loanDto);
             }
         }
 

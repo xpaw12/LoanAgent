@@ -23,8 +23,6 @@ Ext.define('LoanAgentExt.signalr.LoanHub', {
     },
 
     onLoanReceived: function (loan) {
-        console.log('New Loan Received: ', loan);
-
         const grid = Ext.ComponentQuery.query('adminloansgrid')[0];
         if (grid) {
             const store = grid.getStore();

@@ -3,7 +3,6 @@ using LoanAgent.Api.FilterAttributes;
 using LoanAgent.Api.JsonConverters;
 using LoanAgent.Api.Swagger;
 using LoanAgent.Application;
-using LoanAgent.Domain.Common;
 using LoanAgent.Infrastructure;
 using LoanAgent.Infrastructure.SignalRHubs;
 
@@ -69,6 +68,8 @@ try
     app.UseRouting();
 
     app.UseSwagger(app.Environment);
+
+    app.UseSerilogRequestLogging();
 
     app.UseHttpsRedirection();
 

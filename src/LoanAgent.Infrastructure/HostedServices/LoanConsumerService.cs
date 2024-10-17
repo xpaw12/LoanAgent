@@ -1,27 +1,23 @@
-﻿using LoanAgent.Infrastructure.Data;
+﻿using LoanAgent.Application.Common.Dtos;
+using LoanAgent.Domain.Common;
+using LoanAgent.Infrastructure.SignalRHubs;
+
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Quartz;
-using RabbitMQ.Client.Events;
+using Microsoft.Extensions.Options;
 
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 
-using System.Text.Json;
+using Serilog;
 
 using System.Text;
-using LoanAgent.Domain.Common;
-using Microsoft.Extensions.Options;
-using LoanAgent.Domain.Entities;
-using Microsoft.AspNetCore.SignalR;
-using LoanAgent.Infrastructure.SignalRHubs;
-using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace LoanAgent.Infrastructure.Jobs;
 
-
 public class LoanConsumerService : IHostedService
 {
-    private readonly ILogger<LoanConsumerService> _logger;
     private readonly IHubContext<LoanHub> _hubContext;
     private readonly IModel _channel;
     private readonly IConnection _connection;
@@ -29,7 +25,6 @@ public class LoanConsumerService : IHostedService
     private bool _disposed = false;
 
     public LoanConsumerService(IOptions<RabbitMqSettings> rabbitMqSettings, 
-        ILogger<LoanConsumerService> logger,
         IHubContext<LoanHub> hubContext)
     {
         var settings = rabbitMqSettings.Value;
@@ -50,8 +45,6 @@ public class LoanConsumerService : IHostedService
                               autoDelete: false,
                               arguments: null);
 
-        _logger = logger;
-
         _hubContext = hubContext;
     }
 
@@ -65,16 +58,17 @@ public class LoanConsumerService : IHostedService
 
             try
             {
-                var loan = JsonSerializer.Deserialize<LoanEntity>(message); 
+                var loan = JsonSerializer.Deserialize<LoanDto>(message); 
 
                 if (loan != null)
                 {
+                    Log.Information("Loan retreived from the queue: {@Loan}", loan);
                     await HandleLoanMessage(loan);
                 }
             }
             catch (JsonException ex)
             {
-                _logger.LogError($"Failed to deserialize message: {ex.Message}");
+                Log.Error($"Failed to deserialize message: {ex.Message}");
             }
         };
 
@@ -82,12 +76,12 @@ public class LoanConsumerService : IHostedService
                               autoAck: true,
                               consumer: consumer);
 
-        _logger.LogInformation("LoanConsumerService started and is listening for messages.");
+        Log.Information("LoanConsumerService started and is listening for messages.");
 
         return Task.CompletedTask;
     }
 
-    private async Task HandleLoanMessage(LoanEntity loan)
+    private async Task HandleLoanMessage(LoanDto loan)
     {
         await _hubContext.Clients.All.SendAsync("ReceiveLoanUpdate", loan);
     }
@@ -97,7 +91,7 @@ public class LoanConsumerService : IHostedService
         _channel?.Close();
         _connection?.Close();
 
-        _logger.LogInformation("LoanConsumerService stopped.");
+        Log.Information("LoanConsumerService stopped.");
 
         return Task.CompletedTask;
     }

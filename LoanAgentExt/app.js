@@ -20,13 +20,8 @@ Ext.application({
 
         const token = localStorage.getItem('accessToken');
         if (token && this.isTokenValid(token)) {
-            const role = this.getUserRole(token); // Get the user's role
-            if (role == 0) {
-                this.setMainView('LoanAgentExt.view.main.Main'); // Regular user view
-            } else if (role == 1) {
-                LoanAgentExt.signalr.LoanHub.connect();
-                this.setMainView('LoanAgentExt.view.admin.Admin'); // Admin view
-            }
+            this.setMainViewByRole(token);
+
         } else {
             this.setMainView('LoanAgentExt.view.auth.Login');
             if (token) {
@@ -61,7 +56,7 @@ Ext.application({
         );
 
         const payloadObject = JSON.parse(jsonPayload);
-        return payloadObject.role; // Assuming your JWT contains the role field
+        return payloadObject.role;
     },
 
     getUserId: function () {
@@ -85,5 +80,15 @@ Ext.application({
         this.mainView = Ext.create(view, {
             renderTo: Ext.getBody()
         });
+    },
+
+    setMainViewByRole: function (token) {
+        const role = this.getUserRole(token);
+        if (role == 0) {
+            this.setMainView('LoanAgentExt.view.main.Main');
+        } else if (role == 1) {
+            LoanAgentExt.signalr.LoanHub.connect();
+            this.setMainView('LoanAgentExt.view.admin.Admin');
+        }
     }
 });

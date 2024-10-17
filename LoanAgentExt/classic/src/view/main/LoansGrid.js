@@ -21,7 +21,7 @@ Ext.define('LoanAgentExt.view.main.LoansGrid', {
             text: 'Actions',
             width: 100,
             items: [{
-                iconCls: 'fa fa-arrow-right',
+                iconCls: 'fa fa-arrow-right custom-action-icon',
                 tooltip: 'Submit Loan',
                 handler: function (grid, rowIndex, colIndex) {
                     const record = grid.getStore().getAt(rowIndex);
@@ -41,7 +41,7 @@ Ext.define('LoanAgentExt.view.main.LoansGrid', {
                 },
                 scope: this
             }, {
-                iconCls: 'fa fa-pen',
+                iconCls: 'fa fa-pen custom-action-icon',
                 tooltip: 'Edit Loan',
                 handler: function (grid, rowIndex) {
                     const record = grid.getStore().getAt(rowIndex);
@@ -127,10 +127,10 @@ Ext.define('LoanAgentExt.view.main.LoansGrid', {
                 {
                     text: 'Save',
                     handler: function () {
-                        const formValues = form.getValues(); // Assuming form is defined in the proper scope
+                        const formValues = form.getValues();
                         grid.up('loansgrid').editLoan(formValues);
 
-                        editWindow.close(); // Close the window after submitting
+                        editWindow.close();
                     }
                 },
                 {
@@ -165,7 +165,7 @@ Ext.define('LoanAgentExt.view.main.LoansGrid', {
             },
             success: function (response) {
                 Ext.Msg.alert('Success', 'Loan updated successfully!', function () {
-                    window.location.reload(); // Refresh the page to see updated data
+                    window.location.reload();
                 });
             },
             failure: function () {

@@ -67,12 +67,11 @@ Ext.define('LoanAgentExt.view.admin.Admin', {
         }
     },
 
-    // Add the toolbar containing the Logout button
     dockedItems: [{
         xtype: 'toolbar',
         dock: 'top',
         items: [
-            '->', // Push the logout button to the right
+            '->',
             {
                 xtype: 'button',
                 text: 'Logout',
@@ -83,31 +82,12 @@ Ext.define('LoanAgentExt.view.admin.Admin', {
         ]
     }],
 
-    // Replace `mainlist` with `LoansGrid`
     items: [{
         title: 'Home',
         iconCls: 'fa-home',
         items: [{
             xtype: 'adminloansgrid'
         }]
-    }, {
-        title: 'Users',
-        iconCls: 'fa-user',
-        bind: {
-            html: '{loremIpsum}'
-        }
-    }, {
-        title: 'Groups',
-        iconCls: 'fa-users',
-        bind: {
-            html: '{loremIpsum}'
-        }
-    }, {
-        title: 'Settings',
-        iconCls: 'fa-cog',
-        bind: {
-            html: '{loremIpsum}'
-        }
     }],
 
     listeners: {

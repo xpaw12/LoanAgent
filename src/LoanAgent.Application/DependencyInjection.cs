@@ -39,7 +39,6 @@ public static class DependencyInjection
 
         services.Configure<RabbitMqSettings>(configuration.GetSection("RabbitMqSettings"));
         services.AddSingleton<LoanPublisher>();
-        services.AddSingleton<LoanConsumer>();
     }
 
     public static void AddOptions(

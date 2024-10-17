@@ -8,9 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using Quartz;
-using Quartz.Simpl;
-
 namespace LoanAgent.Infrastructure;
 
 public static class DependencyInjection

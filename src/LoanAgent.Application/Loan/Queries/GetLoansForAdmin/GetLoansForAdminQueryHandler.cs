@@ -18,11 +18,12 @@ public class GetLoansForAdminQueryHandler : IRequestHandler<GetLoansForAdminQuer
 
     public async Task<List<LoanDto>> Handle(GetLoansForAdminQuery request, CancellationToken cancellationToken)
     {
-        var loans = await _unitOfWork.LoanRepository.FindAllAsync(l => l.LoanState == LoanState.Submitted, cancellationToken);
+        var loans = await _unitOfWork.LoanRepository.FindAllWithUsersAsync(l => l.LoanState != LoanState.InEditMode, cancellationToken);
 
         return loans.Select(loan => new LoanDto
         {
             LoanId = loan.Id,
+            LoanOwnerName = loan.User.FirstName + " " + loan.User.LastName,
             LoanAmount = loan.LoanAmount,
             Currency = loan.Currency.ToString(),
             StartDate = loan.StartDate,

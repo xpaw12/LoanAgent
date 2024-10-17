@@ -1,9 +1,11 @@
-﻿using LoanAgent.Domain.Common;
-using LoanAgent.Domain.Entities;
+﻿using LoanAgent.Application.Common.Dtos;
+using LoanAgent.Domain.Common;
 
 using Microsoft.Extensions.Options;
 
 using RabbitMQ.Client;
+
+using Serilog;
 
 using System.Text;
 using System.Text.Json;
@@ -35,9 +37,11 @@ public class LoanPublisher
                               exclusive: false,
                               autoDelete: false,
                               arguments: null);
+
+        Log.Information("Connected to RabbitMQ and queue declared: {QueueName}", _queueName);
     }
 
-    public void PublishLoan(LoanEntity loan)
+    public void PublishLoan(LoanDto loan)
     {
         var message = JsonSerializer.Serialize(loan);
         var body = Encoding.UTF8.GetBytes(message);
@@ -46,5 +50,7 @@ public class LoanPublisher
                               routingKey: _queueName,
                               basicProperties: null,
                               body: body);
+
+        Log.Information("Loan published to the queue: {@Loan}", loan);
     }
 }

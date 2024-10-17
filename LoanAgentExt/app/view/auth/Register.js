@@ -64,20 +64,16 @@ Ext.define('LoanAgentExt.view.auth.Register', {
                 if (form.isValid()) {
                     const values = form.getValues();
 
-                    // Send AJAX request to register endpoint
                     Ext.Ajax.request({
                         url: LoanAgentExt.app.apiUrl + '/api/users/create',
                         method: 'POST',
                         jsonData: values,
                         success: function (response) {
                             const result = Ext.decode(response.responseText);
-                            // Save JWT token in local storage
                             localStorage.setItem('accessToken', result);
 
                             Ext.Msg.alert('Success', 'Account created successfully');
 
-                            // Navigate to main application view
-                            //Ext.ComponentManager.get('viewport').removeAll(); // Clear existing components
                             LoanAgentExt.app.setMainView('LoanAgentExt.view.main.Main');
                         },
                         failure: function () {
