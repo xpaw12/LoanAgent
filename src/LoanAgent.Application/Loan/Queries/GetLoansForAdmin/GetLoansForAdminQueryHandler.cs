@@ -9,17 +9,11 @@ namespace LoanAgent.Application.Loan.Queries.GetLoansForAdmin;
 public class GetLoansForAdminQueryHandler : IRequestHandler<GetLoansForAdminQuery, List<LoanDto>>
 {
     private readonly IUnitOfWork _unitOfWork;
-    //private readonly LoanConsumer _loanConsumer;
-    //private readonly List<LoanEntity> _loans = new();
 
     public GetLoansForAdminQueryHandler(
         IUnitOfWork unitOfWork)
-        //LoanConsumer loanConsumer)
     {
         _unitOfWork = unitOfWork;
-        //_loanConsumer = loanConsumer;
-
-        //_loanConsumer.StartConsuming(ReceiveLoan);
     }
 
     public async Task<List<LoanDto>> Handle(GetLoansForAdminQuery request, CancellationToken cancellationToken)
@@ -41,9 +35,4 @@ public class GetLoansForAdminQueryHandler : IRequestHandler<GetLoansForAdminQuer
             UpdatedById = loan.UpdatedById
         }).ToList();
     }
-
-    //private async Task ReceiveLoan(LoanEntity loan)
-    //{
-    //    _loans.Add(loan);
-    //}
 }
